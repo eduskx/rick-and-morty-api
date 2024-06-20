@@ -1,4 +1,9 @@
 import { CharacterCard } from "./components/CharacterCard/CharacterCard.js";
+import { SearchBar } from "./components/SearchBar/SearchBar.js";
+import { NavButton } from "./components/NavButton/NavButton.js";
+
+SearchBar();
+NavButton();
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
@@ -59,7 +64,6 @@ nextButton.addEventListener("click", () => {
   // pagination.textContent = `${page} / ${maxPage}`;
 });
 
-// searchbar
 /////////////////////////////////////////////
 searchBar.addEventListener("submit", (event) => {
   event.preventDefault();
