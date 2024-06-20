@@ -12,16 +12,18 @@ const pagination = document.querySelector('[data-js="pagination"]');
 const searchBarInput = document.querySelector("#searchBarInput");
 
 // States
-const maxPage = 42;
+let maxPage = 0;
 let page = 1;
 let searchQuery = "";
-const url = "https://rickandmortyapi.com/api/character/?page=";
+let url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
 
-pagination.textContent = `${page} / ${maxPage}`;
-
-async function fetchCharacters(page) {
-  const response = await fetch(url + page);
+// fetch
+/////////////////////////////////////////////
+async function fetchCharacters(url) {
+  const response = await fetch(url);
   const character = await response.json();
+  maxPage = character.info.pages;
+  pagination.textContent = `${page} / ${maxPage}`;
 
   console.log(character);
 
@@ -31,30 +33,40 @@ async function fetchCharacters(page) {
     CharacterCard(element);
   });
 }
-fetchCharacters(1);
+fetchCharacters(url);
 
+// prev
+/////////////////////////////////////////////
 prevButton.addEventListener("click", () => {
   if (page === 1) {
     return;
   }
-  fetchCharacters(page - 1);
   page--;
-  pagination.textContent = `${page} / ${maxPage}`;
+  url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
+  fetchCharacters(url);
+  // pagination.textContent = `${page} / ${maxPage}`;
 });
 
+// next
+/////////////////////////////////////////////
 nextButton.addEventListener("click", () => {
   if (page === maxPage) {
     return;
   }
-  fetchCharacters(page + 1);
-  page++;
-  pagination.textContent = `${page} / ${maxPage}`;
+  page = page + 1;
+  url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
+  fetchCharacters(url);
+  // pagination.textContent = `${page} / ${maxPage}`;
 });
 
+// searchbar
+/////////////////////////////////////////////
 searchBar.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  page = 1;
   searchQuery = searchBarInput.value;
-  const searchURL = url + `&name=${searchQuery}`;
-  console.log(searchURL);
-  fetchCharacters();
+  url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
+
+  fetchCharacters(url);
 });
